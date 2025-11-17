@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gpa_calculator.Result">
+   <children>
+      <TextField fx:id="gpaField" layoutX="198.0" layoutY="188.0" />
+      <Label layoutX="106.0" layoutY="192.0" text="Your GPA">
+         <font>
+            <Font name="Bell MT Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="87.0" layoutY="320.0" mnemonicParsing="false" text="Start New" textFill="#149628" onAction="#restart">
+         <font>
+            <Font name="Bell MT Italic" size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="294.0" layoutY="320.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="65.0" text="Exit" textFill="#ce1616" onAction="#exitApp">
+         <font>
+            <Font name="Bell MT Italic" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
