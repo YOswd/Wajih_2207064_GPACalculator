@@ -1,29 +1,14 @@
 package com.example.gpa_calculator;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class CourseManager {
-    private static List<Course> courses = new ArrayList<>();
+    public static ObservableList<Course> courses = FXCollections.observableArrayList();
+    public static ObservableList<Student> students = FXCollections.observableArrayList();
 
-    public static void addCourse(Course course) {
-        courses.add(course);
-    }
-
-    public static double calculateCGPA() {
-        double totalCredits = 0;
-        double totalPoints = 0;
-
-        for(Course course:courses) {
-            totalCredits += course.getCredit();
-            totalPoints += course.getCredit()*course.getGradePoint();
-        }
-
-        if(totalCredits == 0) return 0.0;
-        return totalPoints/totalCredits;
-    }
-
-    public static void clear() {
-        courses.clear();
-    }
+    public static void addCourse(Course c) { courses.add(c); }
+    public static void clearCourses() { courses.clear(); }
+    public static void addStudent(Student s) { students.add(s); }
+    public static void clearStudents() { students.clear(); }
 }

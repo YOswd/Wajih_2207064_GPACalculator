@@ -11,6 +11,8 @@ module com.example.gpa_calculator {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
+    requires java.sql;
+
     opens com.example.gpa_calculator to javafx.fxml;
     exports com.example.gpa_calculator;
 }

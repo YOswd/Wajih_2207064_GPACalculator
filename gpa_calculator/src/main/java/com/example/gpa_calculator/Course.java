@@ -13,20 +13,8 @@ public class Course {
         this.gradePoint = gradePoint;
     }
 
-    public double getCredit() {
-        return credit;
-    }
-
-    public double getGradePoint() {
-        return gradePoint;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
+    public String getName() { return name; }
+    public String getCode() { return code; }
+    public double getCredit() { return credit; }
+    public double getGradePoint() { return gradePoint; }
 }

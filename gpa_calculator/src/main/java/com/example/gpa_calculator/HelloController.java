@@ -15,7 +15,7 @@ public class HelloController {
     private void onHelloButtonClick() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("gpa_calculator.fxml"));
-            Scene scene = new Scene(loader.load(),600,600);
+            Scene scene = new Scene(loader.load(),800,800);
 
             Stage stage = (Stage)welcomeText.getScene().getWindow();
             stage.setScene(scene);

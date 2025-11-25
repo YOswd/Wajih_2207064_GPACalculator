@@ -1,20 +1,19 @@
 package com.example.gpa_calculator;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class GPACalculate {
 
+    @FXML private TextField studentNameField;
+    @FXML private TextField studentRollField;
     @FXML private TextField courseNameField;
     @FXML private TextField courseCodeField;
     @FXML private TextField courseCreditField;
-    @FXML private TextField teacher1Field;
-    @FXML private TextField teacher2Field;
     @FXML private TextField gradeField;
 
     @FXML private Button addCourseButton;
@@ -43,82 +42,71 @@ public class GPACalculate {
 
     @FXML
     private void addCourse() {
-        String nameText = courseNameField.getText().trim();
-        String codeText = courseCodeField.getText().trim();
+        String name = courseNameField.getText().trim();
+        String code = courseCodeField.getText().trim();
         String creditText = courseCreditField.getText().trim();
-        String teacher1Text = teacher1Field.getText().trim();
-        String teacher2Text = teacher2Field.getText().trim();
         String gradeText = gradeField.getText().trim();
 
-        System.out.println("Name = '" + courseNameField.getText() + "'");
-        System.out.println("Code = '" + courseCodeField.getText() + "'");
-        System.out.println("Credit = '" + courseCreditField.getText() + "'");
-        System.out.println("Teacher 1 : " + teacher1Field.getText() + "'");
-        System.out.println("Teacher 2 : " + teacher2Field.getText() + "'");
-        System.out.println("Grade = '" + gradeField.getText() + "'");
-
-
-        if (nameText.isEmpty() || codeText.isEmpty() || creditText.isEmpty() || gradeText.isEmpty()) {
-            showError("Please fill all fields.");
+        if(name.isEmpty() || code.isEmpty() || creditText.isEmpty() || gradeText.isEmpty()){
+            showError("Fill all course fields!");
             return;
         }
 
         double credit;
-        try {
-            credit = Double.parseDouble(creditText);
-            if (credit <= 0) {
-                showError("Credit must be a positive number.");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            showError("Credit must be a valid number.");
-            return;
-        }
+        try { credit = Double.parseDouble(creditText); }
+        catch(NumberFormatException e) { showError("Credit must be number!"); return; }
 
         double gradePoint = gradeToPoint(gradeText);
-        if (gradePoint == -1) {
-            showError("Invalid grade! Example: A+, A-, B, C+");
-            return;
-        }
+        if(gradePoint == -1) { showError("Invalid grade!"); return; }
 
-        CourseManager.addCourse(new Course(nameText, codeText, credit, gradePoint));
-
-        courseNameField.clear();
-        courseCodeField.clear();
-        courseCreditField.clear();
-        teacher1Field.clear();
-        teacher2Field.clear();
-        gradeField.clear();
-
+        CourseManager.addCourse(new Course(name, code, credit, gradePoint));
+        clearCourseFields();
         calculateButton.setDisable(false);
-        showInfo("Course added successfully!");
     }
 
     @FXML
     private void calculateGPA() {
+        String name = studentNameField.getText().trim();
+        String roll = studentRollField.getText().trim();
+        if(name.isEmpty() || roll.isEmpty()) { showError("Enter student info!"); return; }
+
+        Student student = new Student(name, roll);
+        student.getCourses().addAll(CourseManager.courses);
+        CourseManager.clearCourses();
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                DatabaseManager.insertGPA(student);
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(e -> loadResultPage());
+        task.setOnFailed(e -> showError("Failed to save GPA!"));
+
+        new Thread(task).start();
+    }
+
+    private void loadResultPage() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("result.fxml"));
-            Scene scene = new Scene(loader.load());
-
-            Stage stage = (Stage) courseCreditField.getScene().getWindow();
+            Scene scene = new Scene(loader.load(), 700, 700);
+            Stage stage = (Stage) studentNameField.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e) {
-            showError("Failed to load result page.");
-        }
+        } catch(Exception e){ e.printStackTrace(); }
     }
 
-    private void showError(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setContentText(msg);
+    private void showError(String msg){
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
         alert.show();
     }
 
-    private void showInfo(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setContentText(msg);
-        alert.show();
+    private void clearCourseFields() {
+        courseNameField.clear();
+        courseCodeField.clear();
+        courseCreditField.clear();
+        gradeField.clear();
     }
 }
