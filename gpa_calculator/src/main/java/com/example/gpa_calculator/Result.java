@@ -1,7 +1,5 @@
 package com.example.gpa_calculator;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Result {
 
@@ -69,7 +69,7 @@ public class Result {
     private void restart() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("gpa_calculator.fxml"));
-            Scene scene = new Scene(loader.load(), 700, 700);
+            Scene scene = new Scene(loader.load(), 800, 800);
             Stage stage = (Stage) table.getScene().getWindow();
             stage.setScene(scene);
             stage.show();

@@ -1,12 +1,12 @@
 package com.example.gpa_calculator;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Student {
     private String name;
     private String roll;
-    private ObservableList<Course> courses = FXCollections.observableArrayList();
+    private final List<Course> courses = new ArrayList<>();
 
     public Student(String name, String roll) {
         this.name = name;
@@ -15,15 +15,21 @@ public class Student {
 
     public String getName() { return name; }
     public String getRoll() { return roll; }
-    public ObservableList<Course> getCourses() { return courses; }
+    public List<Course> getCourses() { return courses; }
 
     public double calculateGPA() {
-        double totalCredits = 0;
-        double totalPoints = 0;
+        double totalCredits = 0.0;
+        double totalWeightedPoints = 0.0;
+
         for (Course c : courses) {
-            totalCredits += c.getCredit();
-            totalPoints += c.getCredit() * c.getGradePoint();
+            double cr = c.getCredit();
+            double gp = c.getGradePoint();
+            totalCredits += cr;
+            totalWeightedPoints += cr * gp;
         }
-        return totalCredits == 0 ? 0.0 : totalPoints / totalCredits;
+
+        if (totalCredits == 0) return 0.0;
+        double gpa = totalWeightedPoints / totalCredits;
+        return Math.round(gpa * 100.0) / 100.0;
     }
 }
